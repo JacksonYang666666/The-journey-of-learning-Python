@@ -1,0 +1,37 @@
+# Jackson Yang的编程初体验
+w=[10,20,30,40,50,60,30]
+print(w[0])
+print(w.index(10))
+print(w[0:3:])
+print(10 in w)
+print(10 not in w)
+print(100 in w)
+print(100 not in w)
+w.append(60)
+print(w)
+w.extend([10,20,60,80])
+print(w)
+w.insert(1,100)
+print(w)
+w[0:3:]=[99,999,9999,99999]
+print(w)
+w.remove(99)
+print(w)
+w.pop(1)
+print(w)
+w[0:2:]=[]
+print(w)
+w[1]=66
+print(w)
+w[0:5:2]=[666,666,666]
+print(w)
+w.sort(reverse=True)
+print(w)
+w.sort(reverse=False)
+print(w)
+w=[666, 66, 666, 60, 666, 60, 10, 20, 60, 80]
+new_list1=sorted(w,reverse=True)
+new_list2=sorted(w,reverse=False)
+print(w)
+print(new_list1)
+print(new_list2)
