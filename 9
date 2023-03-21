@@ -1,0 +1,11 @@
+y1,m1,d1=eval(input('输入出生日期：'))
+y2,m2,d2=eval(input('输入当前的日期'))
+if m1<m2:
+    print(y2-y1)
+elif m1>m2:
+    print(y2-y1-1)
+elif m1==m2:
+    if d1<=d2:
+        print(y2-y1)
+    elif d1>d2:
+        print(y2-y1-1)
