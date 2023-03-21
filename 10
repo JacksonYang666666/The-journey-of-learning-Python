@@ -1,0 +1,17 @@
+p,w,s=eval(input('输入基本运费、货物重量和距离：'))
+if s<250:
+    d=0
+elif s<500:
+    d=0.025
+elif s<1000:
+    d=0.045
+elif s<2000:
+    d=0.075
+elif s<2500:
+    d=0.090
+elif s<3000:
+    d=0.120
+else:
+    d=0.150
+f=p*w*s*(1-d)
+print(f)
