@@ -1,0 +1,6 @@
+n=1
+s=0
+while abs(s-8)>1e-2:
+    s+=(1/n)
+    n+=1
+print('s=',s,'n=',n-1)
