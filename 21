@@ -1,0 +1,13 @@
+s=input('输入一个字母标识符：')
+sum=0
+import string
+upper=string.ascii_uppercase
+lower=string.ascii_lowercase
+for i in s:
+    if i in upper:
+        num=ord(i)-64
+        sum+=num
+    if i in lower:
+        num=ord(i)-96
+        sum+=num
+print(sum)
