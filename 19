@@ -1,0 +1,16 @@
+s=input('请输入一行字符：')
+l=len(s)
+alpha_num=0
+digit_num=0
+space_num=0
+others_num=0
+for i  in range(l):
+    if s[i].isalpha():
+        alpha_num+=1
+    elif s[i].isdigit():
+        digit_num+=1
+    elif s[i].isspace():
+        space_num+=1
+    else:
+        others_num+=1
+print('英文字母、空格、数字和其它字符的个数为：',alpha_num,space_num,digit_num,others_num)
