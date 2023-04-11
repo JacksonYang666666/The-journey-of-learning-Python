@@ -1,0 +1,6 @@
+import re
+s=input('请输入一个字符串：')
+if re.match('[a-z0-9]',s):
+    print(True)
+else:
+    print(False)
