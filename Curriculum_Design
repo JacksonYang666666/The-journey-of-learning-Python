@@ -1,0 +1,165 @@
+fo1 = open('booksinfo.txt', 'w')
+fo2 = open('borrowinfo.txt', 'w')
+fo3 = open('studentsinfo.txt', 'w')
+# 输入图书信息，最后一行输入*截止，表头为书号、书名、出版社、作者、价格和库存。
+lst1 = []
+x1 = input('输入图书信息：')
+while x1 != '*':
+    y1 = x1.split()
+    lst1.append(y1)
+    x1 = input()
+fo1.writelines(str(lst1))
+fo1.close()
+# 输入学生信息，最后一行输入*截止，表头为学号、姓名、性别和班级
+lst3 = []
+x3 = input('输入学生信息：')
+while x3 != '*':
+    y3 = x3.split()
+    lst3.append(y3)
+    x3 = input()
+fo3.writelines(str(lst3))
+fo3.close()
+fo1 = open('booksinfo.txt', 'r')
+s1 = fo1.read()
+print('图书信息为：')
+print(s1)
+fo3 = open('studentsinfo.txt', 'r')
+s3 = fo3.read()
+print('学生信息为：')
+print(s3)
+# 输入借阅信息#还书日期不知道用0代替，最后一行输入*截止，表头为学号、书号、借阅日期和还书日期。
+lst2 = []
+x2 = input('输入借阅信息：')
+while x2 != '*':
+    y2 = x2.split()
+    lst2.append(y2)
+    x2 = input()
+fo2.writelines(str(lst2))
+fo2.close()
+# 借阅功能
+print('开始借书')
+students_num = input('请输入学号：')
+books_num = input('请输入书号：')
+borrow_day = input('请输入借阅日期：')
+num = 0
+for k in range(len(lst2)):
+    if lst2[k][0] == students_num:
+        num += 1
+flag1 = 0
+flag2 = 0
+if num < 5:
+    for i in range(len(lst1)):
+        if int(books_num) != lst1[i][0] or lst1[i][5] == 0:
+            continue
+        else:
+            flag1 = 1
+            for j in range(len(lst3)):
+                if int(students_num) != lst3[j][0]:
+                    continue
+                else:
+                    flag2 = 1
+                    lst1[i][5]=int(lst1[i][5])-1
+                    x2 = [students_num, books_num, borrow_day, 0]
+                    lst2.append(x2)
+                    print('借阅成功')
+    if flag1 == 0:
+        print('此书不存在或库存不足。')
+    elif flag2==0:
+        print('不存在该学生。')
+else:
+    print('借阅书籍已达5本，无法继续借阅。')
+fo1 = open('booksinfo.txt', 'w')
+fo2 = open('borrowinfo.txt', 'w')
+fo1.writelines(str(lst1))
+fo1.close()
+fo2.writelines(str(lst2))
+fo2.close()
+# 还书功能
+students_num = input('请输入学号：')
+books_num = input('请输入书号：')
+return_day = input('请输入还书日期：')
+flag3=0
+for i in range(len(lst2)):
+    if lst2[i][0]!=students_num or lst2[i][1]!=books_num or lst2[i][3]!=str(0):
+        continue
+    else:
+        flag3=1
+        lst2[i][3]=return_day
+        print('还书成功')
+        break
+if flag3==0:
+    print('被借书目找不到该书或您未借阅该书。')
+elif flag3==1:
+    for i in range(len(lst1)):
+        if lst1[i][0]==books_num:
+            lst1[i][5]=int(lst1[i][5])+1
+            break
+fo1 = open('booksinfo.txt', 'w')
+fo2 = open('borrowinfo.txt', 'w')
+fo1.writelines(str(lst1))
+fo1.close()
+fo2.writelines(str(lst2))
+fo2.close()
+# 输入某学生姓名，可以查询该生的借阅图书信息
+lst4=[]
+students_name=input('请输入学生姓名：')
+for i in range(len(lst3)):
+    if lst3[i][1]==students_name:
+        students_id=lst3[i][0]
+        break
+for i in range(len(lst2)):
+    if lst2[i][0]==students_id and lst2[i][3]==0:
+        books_id=lst2[i][1]
+        lst4.append(books_id)
+print('该学生所借图书的书号为：',lst4)
+# 输入某书号，可以查询借阅该书的学生信息
+lst5=[]
+books_id=input('请输入书号：')
+for i in range(len(lst2)):
+    if lst2[i][1]==books_id and lst2[i][3]==0:
+        students_id=lst2[i][0]
+        lst5.append(students_id)
+print('借阅该书的学生的学号为',lst5)
+# 输入出版社的名称，可以统计图书馆中该出版社的图书藏书量
+sum1=0
+press_name=input('请输入出版社的名称：')
+for i in range(len(lst1)):
+    if press_name==lst1[i][2]:
+        sum1+=int(lst1[i][5])
+print('该出版社的图书馆藏书量为{}。'.format(sum1))
+# 查询显示当前日期下图书逾期未还的同学的信息,最长借出时间为2个月，按60天计,一个月按30天算。
+lst6=[]
+import time
+now_day=time.strftime('%Y%m%d')
+for i in range(len(lst2)):
+    if lst2[i][3]==str(0):
+        y=int(lst2[i][3][0:4:])
+        m=int(lst2[i][3][4:6:])
+        d=lst2[i][3][6:8:]
+        nm=m+2
+        if nm>12:
+            nm-=12
+            if nm<10:
+                nm=str(0)+str(nm)
+            else:
+                nm=str(nm)
+            ny=y+1
+        else:
+            ny=y
+        day=str(ny)+nm+d
+        if day<now_day:
+            students_id=lst2[i][0]
+            lst6.append(students_id)
+print('逾期未还的同学的学号为',lst6)
+# 统计学生的借阅图书数量（包含已还和未还图书），并按降序输出（格式：姓名 借阅图书数）
+sum2=0
+dict1={}
+for i in range(len(lst3)):
+    students_id=lst3[i][0]
+    students_name=lst3[i][1]
+    for j in range(len(lst2)):
+        if students_id==lst2[j][0]:
+            sum2+=1
+    dict1[students_name]=[sum2]
+lst7=sorted(dict1.items(),key=lambda x: -x[1])
+print(lst7)
