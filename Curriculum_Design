@@ -1,7 +1,7 @@
 fo1 = open('booksinfo.txt', 'w')
 fo2 = open('borrowinfo.txt', 'w')
 fo3 = open('studentsinfo.txt', 'w')
-# 输入图书信息，最后一行输入*截止，表头为书号、书名、出版社、作者、价格和库存。
+# 输入图书信息，输入一行后回车，最后一行输入*截止，表头为书号、书名、出版社、作者、价格和库存，不用输入表头。
 lst1 = []
 x1 = input('输入图书信息：')
 while x1 != '*':
@@ -10,7 +10,7 @@ while x1 != '*':
     x1 = input()
 fo1.writelines(str(lst1))
 fo1.close()
-# 输入学生信息，最后一行输入*截止，表头为学号、姓名、性别和班级
+# 输入学生信息，输入一行后回车，最后一行输入*截止，表头为学号、姓名、性别和班级，不用输入表头。
 lst3 = []
 x3 = input('输入学生信息：')
 while x3 != '*':
@@ -27,7 +27,7 @@ fo3 = open('studentsinfo.txt', 'r')
 s3 = fo3.read()
 print('学生信息为：')
 print(s3)
-# 输入借阅信息#还书日期不知道用0代替，最后一行输入*截止，表头为学号、书号、借阅日期和还书日期。
+# 输入借阅信息，还书日期不知道用0代替，输入一行后回车，最后一行输入*截止，表头为学号、书号、借阅日期和还书日期，不用输入表头。
 lst2 = []
 x2 = input('输入借阅信息：')
 while x2 != '*':
@@ -75,6 +75,7 @@ fo1.close()
 fo2.writelines(str(lst2))
 fo2.close()
 # 还书功能
+print('开始还书')
 students_num = input('请输入学号：')
 books_num = input('请输入书号：')
 return_day = input('请输入还书日期：')
@@ -108,7 +109,7 @@ for i in range(len(lst3)):
         students_id=lst3[i][0]
         break
 for i in range(len(lst2)):
-    if lst2[i][0]==students_id and lst2[i][3]==0:
+    if lst2[i][0]==students_id and lst2[i][3]==str(0):
         books_id=lst2[i][1]
         lst4.append(books_id)
 print('该学生所借图书的书号为：',lst4)
@@ -116,10 +117,10 @@ print('该学生所借图书的书号为：',lst4)
 lst5=[]
 books_id=input('请输入书号：')
 for i in range(len(lst2)):
-    if lst2[i][1]==books_id and lst2[i][3]==0:
+    if lst2[i][1]==books_id and lst2[i][3]==str(0):
         students_id=lst2[i][0]
         lst5.append(students_id)
-print('借阅该书的学生的学号为',lst5)
+print('借阅该书的学生的学号为：',lst5)
 # 输入出版社的名称，可以统计图书馆中该出版社的图书藏书量
 sum1=0
 press_name=input('请输入出版社的名称：')
@@ -128,38 +129,33 @@ for i in range(len(lst1)):
         sum1+=int(lst1[i][5])
 print('该出版社的图书馆藏书量为{}。'.format(sum1))
 # 查询显示当前日期下图书逾期未还的同学的信息,最长借出时间为2个月，按60天计,一个月按30天算。
+print('当前日期下图书逾期未还的同学的信息：')
 lst6=[]
-import time
-now_day=time.strftime('%Y%m%d')
+import datetime
+from datetime import  timedelta
+current_date=datetime.datetime.now()
 for i in range(len(lst2)):
     if lst2[i][3]==str(0):
-        y=int(lst2[i][3][0:4:])
-        m=int(lst2[i][3][4:6:])
-        d=lst2[i][3][6:8:]
-        nm=m+2
-        if nm>12:
-            nm-=12
-            if nm<10:
-                nm=str(0)+str(nm)
-            else:
-                nm=str(nm)
-            ny=y+1
-        else:
-            ny=y
-        day=str(ny)+nm+d
-        if day<now_day:
+        y=int(lst2[i][2][0:4:])
+        m=int(lst2[i][2][4:6:])
+        d=int(lst2[i][2][6:8:])
+        past_day=datetime.datetime(y,m,d)
+        delta=current_date-past_day
+        delta_days=delta.days
+        if delta_days>=60:
             students_id=lst2[i][0]
             lst6.append(students_id)
 print('逾期未还的同学的学号为',lst6)
 # 统计学生的借阅图书数量（包含已还和未还图书），并按降序输出（格式：姓名 借阅图书数）
-sum2=0
+print('学生的借阅图书数量（包含已还和未还图书）：')
 dict1={}
 for i in range(len(lst3)):
     students_id=lst3[i][0]
     students_name=lst3[i][1]
+    sum2=0
     for j in range(len(lst2)):
         if students_id==lst2[j][0]:
             sum2+=1
-    dict1[students_name]=[sum2]
+    dict1[students_name]=sum2
 lst7=sorted(dict1.items(),key=lambda x: -x[1])
 print(lst7)
